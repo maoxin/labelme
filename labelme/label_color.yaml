@@ -1,0 +1,5 @@
+great egret: [251, 43, 36, 128] # deep carmine pink
+little egret: [249, 152, 39, 128] # sea buckthorn
+other bird: [133, 23, 172, 128] # violet eggplant
+blocked: [16, 79, 250, 128] # crayon blue
+low resolution: [0, 0, 0] # black

@@ -6,6 +6,10 @@ from qtpy import QtGui
 
 import labelme.utils
 
+import yaml
+
+from pathlib import Path
+
 
 # TODO(unknown):
 # - [opt] Store paths instead of creating new ones at each paint.
@@ -35,6 +39,13 @@ class Shape(object):
     point_type = P_ROUND
     point_size = 8
     scale = 1.0
+
+    try:
+        with open(Path(__file__).resolve().parent / "label_color.yaml") as f:
+            label_color = yaml.safe_load(f)
+    except FileNotFoundError:
+        label_color = {}
+        print("File Not Found")
 
     def __init__(self, label=None, line_color=None, shape_type=None):
         self.label = label
@@ -103,8 +114,13 @@ class Shape(object):
 
     def paint(self, painter):
         if self.points:
+            if self.label in self.label_color.keys():
+                line_color = QtGui.QColor(*self.label_color[self.label])
+            else:
+                line_color = self.line_color
+
             color = self.select_line_color \
-                if self.selected else self.line_color
+                if self.selected else line_color
             pen = QtGui.QPen(color)
             # Try using integer sizes for smoother drawing(?)
             pen.setWidth(max(1, int(round(2.0 / self.scale))))
